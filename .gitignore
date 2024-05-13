@@ -1,0 +1,8 @@
+# created by virtualenv automatically
+Lib
+include
+Scripts
+digital_farm_venv
+.vscode
+Digital_Farm/__pycache__/
+Digital_Farm/interfaz de usuario digital farm.pdf

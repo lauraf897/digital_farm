@@ -1,5 +1,7 @@
 import pygame
 import sys
+from registro import registro_screen
+import os
 
 # Inicializar Pygame
 pygame.init()
@@ -15,17 +17,25 @@ BLACK = (0, 0, 0)
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("DIGITAL FARM")
 
+# Obtener la ruta del directorio actual del script
+current_dir = os.path.dirname(__file__)
+
+# Construir la ruta relativa de la imagen
+image_path = os.path.join(current_dir, 'Imagenes/Fondoj.png')
+
 # Carga la imagen de fondo
-background = pygame.image.load("c:\\Users\\DELL\\Proyecto_Final\\Digital_Farm\\Digital_Farm\\Imagenes\\Fondoj.png").convert()
+background = pygame.image.load(image_path).convert()
 
 # Escala la imagen a las dimensiones deseadas
 background = pygame.transform.scale(background, (WIDTH, HEIGHT))
+
 
 # Función para mostrar texto en la pantalla
 def draw_text(text, font, color, surface, x, y):
     text_obj = font.render(text, True, color)
     text_rect = text_obj.get_rect(center=(x, y))
     surface.blit(text_obj, text_rect)
+
 
 # Función principal para la página de inicio
 def main_menu():
@@ -49,11 +59,10 @@ def main_menu():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 if start_button.collidepoint(mouse_pos):
-                    # Aquí puedes llamar a la función que inicia el juego
-                    # Por ejemplo, game_loop()
-                    pass
+                    registro_screen()  # Llama a la pantalla de bienvenida
         
         pygame.display.flip()
+
 
 # Función para el bucle principal del juego
 def game_loop():

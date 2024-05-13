@@ -1,5 +1,6 @@
 import pygame
-import sys
+import os
+from ejecpreg import welcome_screen, new_game
 
 # Inicializar Pygame
 pygame.init()
@@ -7,36 +8,55 @@ pygame.init()
 # Dimensiones de la pantalla
 ANCHO_PANTALLA = 1200
 ALTO_PANTALLA = 640
+# Colores
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+
 pantalla = pygame.display.set_mode((ANCHO_PANTALLA, ALTO_PANTALLA))
 
-# Cargar imagen de la introducción (si tienes una)
-imagen_intro = pygame.image.load("c:\\Users\\DELL\\Proyecto_Final\\Digital_Farm\\Digital_Farm\\Imagenes\\imintro.png")
+# Obtener la ruta del directorio actual del script
+current_dir = os.path.dirname(__file__)
+
+# Construir la ruta relativa de la imagen
+image_path = os.path.join(current_dir, 'Imagenes/imintro.png')
+
+# Carga la imagen de fondo
+background = pygame.image.load(image_path).convert()
+
 
 # Dibujar la imagen de fondo en la pantalla
-pantalla.blit(imagen_intro, (0, 0))
+pantalla.blit(background, (0, 0))
 
 
-# Bucle principal del juego
-def main():
+# Función para mostrar texto en la pantalla
+def draw_text(text, font, color, surface, x, y):
+    text_obj = font.render(text, True, color)
+    text_rect = text_obj.get_rect(center=(x, y))
+    surface.blit(text_obj, text_rect)
+
+
+def introduccion_screen(username):
     running = True
     while running:
+        title_font = pygame.font.Font(None, 60)
+        # Dibujar botón de inicio
+        question_button = pygame.Rect(ANCHO_PANTALLA//2 - 100, ALTO_PANTALLA//2, 200, 50)
+        pygame.draw.rect(pantalla, BLACK, question_button)
+        # Ajustar el texto para que se muestre con saltos de línea
+        text_lines = (
+            f"Hola {username}.",
+            "Este juego está diseñado"
+        )
+        text = '\n'.join(text_lines)
+        draw_text(text, title_font, WHITE, pantalla, ANCHO_PANTALLA//2, ALTO_PANTALLA//2 + 25)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-
-
-        # Agregar texto
-        font = pygame.font.Font(None, 36)  # Fuente y tamaño del texto
-        text = font.render("¡Bienvenido a mi juego!", True, pygame.Color("black"))  # Crear el texto
-        text_rect = text.get_rect(center=(ANCHO_PANTALLA // 2, ALTO_PANTALLA // 2))  # Posición del texto
-        pantalla.blit(text, text_rect)  # Mostrar texto en la pantalla
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                if question_button.collidepoint(mouse_pos):
+                    welcome_screen()  # Llama a la pantalla de preguntas
+                    new_game()
 
         # Actualización de la pantalla
         pygame.display.flip()
-
-    
-
-if __name__ == "__main__":
-    main()
-
-

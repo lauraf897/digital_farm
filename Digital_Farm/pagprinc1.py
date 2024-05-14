@@ -30,16 +30,22 @@ background = pygame.image.load(image_path).convert()
 background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 
 
-# Función para mostrar texto en la pantalla
 def draw_text(text, font, color, surface, x, y):
     text_obj = font.render(text, True, color)
     text_rect = text_obj.get_rect(center=(x, y))
     surface.blit(text_obj, text_rect)
 
 
-# Función principal para la página de inicio
+def clear_screen():
+    screen.fill(WHITE)
+    screen.blit(background, (0, 0))  # Redibujar el fondo
+
+
 def main_menu():
-    while True:
+    clear_screen()
+    running = True
+    shown_questions = []  # Inicializar la lista de preguntas mostradas
+    while running:
         screen.blit(background, (0, 0))  # Mostrar la imagen de fondo
         
         # Dibujar texto en la pantalla
@@ -54,20 +60,17 @@ def main_menu():
         # Eventos
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                running = False
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 if start_button.collidepoint(mouse_pos):
-                    registro_screen()  # Llama a la pantalla de bienvenida
+                    registro_screen(shown_questions)  # Pasar la lista de preguntas mostradas
+                    return
         
         pygame.display.flip()
 
 
-# Función para el bucle principal del juego
-def game_loop():
-    pass  # Aquí iría el bucle principal del juego
-
-# Ejecutar la página de inicio
 if __name__ == "__main__":
     main_menu()

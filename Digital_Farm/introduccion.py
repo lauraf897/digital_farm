@@ -1,6 +1,6 @@
 import pygame
 import os
-from ejecpreg import welcome_screen, new_game
+from ejecpreg import new_game
 
 # Inicializar Pygame
 pygame.init()
@@ -23,26 +23,28 @@ image_path = os.path.join(current_dir, 'Imagenes/imintro.png')
 # Carga la imagen de fondo
 background = pygame.image.load(image_path).convert()
 
-
 # Dibujar la imagen de fondo en la pantalla
 pantalla.blit(background, (0, 0))
 
 
-# Función para mostrar texto en la pantalla
+def clear_screen():
+    pantalla.fill(WHITE)
+    pantalla.blit(background, (0, 0))  # Redibujar el fondo
+
+
 def draw_text(text, font, color, surface, x, y):
     text_obj = font.render(text, True, color)
     text_rect = text_obj.get_rect(center=(x, y))
     surface.blit(text_obj, text_rect)
 
 
-def introduccion_screen(username):
+def introduccion_screen(username, shown_questions):
+    clear_screen()
     running = True
     while running:
         title_font = pygame.font.Font(None, 60)
-        # Dibujar botón de inicio
         question_button = pygame.Rect(ANCHO_PANTALLA//2 - 100, ALTO_PANTALLA//2, 200, 50)
         pygame.draw.rect(pantalla, BLACK, question_button)
-        # Ajustar el texto para que se muestre con saltos de línea
         text_lines = (
             f"Hola {username}.",
             "Este juego está diseñado"
@@ -52,11 +54,12 @@ def introduccion_screen(username):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+                pygame.quit()
+                return
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 if question_button.collidepoint(mouse_pos):
-                    welcome_screen()  # Llama a la pantalla de preguntas
-                    new_game()
+                    new_game(username, shown_questions)
+                    return
 
-        # Actualización de la pantalla
         pygame.display.flip()

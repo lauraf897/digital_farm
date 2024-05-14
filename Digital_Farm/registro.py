@@ -30,7 +30,13 @@ background = pygame.image.load(image_path).convert()
 background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 
 
-def registro_screen():
+def clear_screen():
+    screen.fill(WHITE)
+    screen.blit(background, (0, 0))  # Redibujar el fondo
+
+
+def registro_screen(shown_questions):
+    clear_screen()
     running = True
     input_box = pygame.Rect(100, 100, 200, 30)
     font = pygame.font.Font(None, 32)
@@ -44,7 +50,7 @@ def registro_screen():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.MOUSEBUTTONDOWN:
                 if input_box.collidepoint(event.pos):
                     active = not active
                 else:
@@ -52,8 +58,8 @@ def registro_screen():
             if event.type == pygame.KEYDOWN:
                 if active:
                     if event.key == pygame.K_RETURN:
-                        # Realizar alguna acción al presionar Enter
-                        introduccion_screen(user_text)
+                        introduccion_screen(user_text, shown_questions)
+                        return
                     elif event.key == pygame.K_BACKSPACE:
                         user_text = user_text[:-1]
                     else:
@@ -66,4 +72,3 @@ def registro_screen():
         text_surface = font.render(user_text, True, color)
         screen.blit(text_surface, (input_box.x + 5, input_box.y + 5))
         pygame.display.flip()
-
